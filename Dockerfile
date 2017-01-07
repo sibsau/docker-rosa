@@ -3,5 +3,5 @@
 #
 
 FROM scratch
-MAINTAINER "Anton goroshkin" <neobht@sibsau.ru>
+MAINTAINER "Anton Goroshkin" <neobht@sibsau.ru>
 ADD rootfs.tar.xz /
