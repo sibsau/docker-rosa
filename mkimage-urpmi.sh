@@ -6,7 +6,7 @@
 #
 
 rootfsDir="./rootfsDir" 
-basePackages="basesystem-minimal urpmi"
+basePackages="basesystem-minimal urpmi locales locales-en"
 mirror="--mirrorlist http://abf-downloads.rosalinux.ru/rosa2016.1/repository/x86_64/"
 tarFile="./rootfs.tar.xz"
 
@@ -25,7 +25,7 @@ tarFile="./rootfs.tar.xz"
   
   # Clean 
   #  locales
-	rm -rf usr/{{lib,share}/locale,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
+	#rm -rf usr/{{lib,share}/locale,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
 	#  docs
 	rm -rf usr/share/{man,doc,info,gnome/help}
 	#  cracklib
@@ -35,6 +35,8 @@ tarFile="./rootfs.tar.xz"
 	#  urpmi cache
 	rm -rf var/cache/urpmi
 	mkdir -p --mode=0755 var/cache/urpmi
+	# rpm
+	rm var/lib/rpm/*db.*
 	#  sln
 	rm -rf sbin/sln
 	#  ldconfig
@@ -60,4 +62,4 @@ touch "$tarFile"
         tar --numeric-owner -caf "$tarFile" -C "$rootfsDir" --transform='s,^./,,' .
 )
 
-( set -x; rm -rf "$rootfsDir" )
+#( set -x; rm -rf "$rootfsDir" )
