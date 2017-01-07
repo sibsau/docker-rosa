@@ -1,2 +1,2 @@
 # docker-rosa
-Rosa docker images
+Rosa Linux docker images
