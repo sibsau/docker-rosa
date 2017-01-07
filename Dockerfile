@@ -4,4 +4,4 @@
 
 FROM scratch
 MAINTAINER "Anton Goroshkin" <neobht@sibsau.ru>
-ADD rootfs.tar.xz /
+ADD https://github.com/sibsau/docker-rosa/raw/master/rootfs.tar.xz /
