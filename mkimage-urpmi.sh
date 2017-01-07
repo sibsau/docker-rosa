@@ -14,7 +14,7 @@ tarFile="./rootfs.tar.xz"
         urpmi.addmedia --distrib \
                 $mirror \
                 --urpmi-root "$rootfsDir"
-        urpmi "$basePackages" \
+        urpmi $basePackages \
                 --auto \
                 --no-suggests \
                 --urpmi-root "$rootfsDir" \
@@ -41,7 +41,7 @@ tarFile="./rootfs.tar.xz"
 	#rm -rf sbin/ldconfig
 	rm -rf etc/ld.so.cache var/cache/ldconfig
 	mkdir -p --mode=0755 var/cache/ldconfig
-
+ cd ..
 # Docker mounts tmpfs at /dev and procfs at /proc so we can remove them
 rm -rf "$rootfsDir/dev" "$rootfsDir/proc"
 mkdir -p "$rootfsDir/dev" "$rootfsDir/proc"
