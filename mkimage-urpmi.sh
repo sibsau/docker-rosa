@@ -8,7 +8,7 @@
 arch="x86_64"
 rosaVersion="rosa2016.1"
 rootfsDir="./rootfsDir" 
-basePackages="basesystem-minimal urpmi locales locales-en git-core abf htop"
+basePackages="basesystem-minimal urpmi locales locales-en git-core abf htop xz iputils iproute2 nano"
 mirror="--mirrorlist http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/"
 tarFile="./rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d).tar.xz"
 
