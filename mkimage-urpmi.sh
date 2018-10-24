@@ -9,9 +9,12 @@
 arch="${arch:-x86_64}"
 rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
-basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf htop xz iputils iproute2 nano}"
+outDir="${outDir:-"."}"
+basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
-tarFile="./rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d).tar.xz"
+outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
+tarFile="${outDir}/${outName}.tar.xz"
+sqfsFile="${outDir}/${outName}.sqfs"
 
 (
         urpmi.addmedia --distrib \
@@ -30,8 +33,6 @@ tarFile="./rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d).tar.xz"
 	#  urpmi cache
 	rm -rf var/cache/urpmi
 	mkdir -p --mode=0755 var/cache/urpmi
-	#  ldconfig
-	#rm -rf sbin/ldconfig
 	rm -rf etc/ld.so.cache var/cache/ldconfig
 	mkdir -p --mode=0755 var/cache/ldconfig
  popd
@@ -54,6 +55,8 @@ touch "$tarFile"
         set -x
         tar --numeric-owner -caf "$tarFile" -C "$rootfsDir" --transform='s,^./,,' .
         ln -s "$tarFile" "./rootfs.tar.xz"
+        mksquashfs "$rootfsDir" "$sqfsFile" -comp xz
+        
 )
 
 ( set -x; rm -rf "$rootfsDir" )
