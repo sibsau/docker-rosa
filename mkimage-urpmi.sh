@@ -51,7 +51,7 @@ touch "$tarFile"
 (
         set -x
         tar --numeric-owner -caf "$tarFile" -C "$rootfsDir" --transform='s,^./,,' .
-        ln -s "./rootfs.tar.xz" "$tarFile"
+        ln -s "$tarFile" "./rootfs.tar.xz"
 )
 
 ( set -x; rm -rf "$rootfsDir" )
