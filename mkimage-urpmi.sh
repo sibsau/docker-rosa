@@ -11,7 +11,7 @@ rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
 outDir="${outDir:-"."}"
 # branding-configs-fresh has problems with dependencies
-basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
+basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf rpm-build htop xz iputils iproute2 nano squashfs-tools tar}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
