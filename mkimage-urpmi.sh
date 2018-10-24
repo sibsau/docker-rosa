@@ -10,7 +10,7 @@ arch="${arch:-x86_64}"
 rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
 outDir="${outDir:-"."}"
-basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
+basePackages="${basePackages:-basesystem-minimal branding-configs-fresh urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
@@ -48,7 +48,7 @@ nameserver 77.88.8.8
 nameserver 8.8.4.4
 nameserver 77.88.8.1
 EOF
-    
+
 touch "$tarFile"
 
 (
