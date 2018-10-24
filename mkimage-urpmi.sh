@@ -5,10 +5,11 @@
 # Based on mkimage-urpmi.sh (https://github.com/juanluisbaptiste/docker-brew-mageia)
 #
 
+rosaVersion="rosa2016.1"
 rootfsDir="./rootfsDir" 
-basePackages="basesystem-minimal urpmi locales locales-en"
-mirror="--mirrorlist http://abf-downloads.rosalinux.ru/rosa2016.1/repository/x86_64/"
-tarFile="./rootfs.tar.xz"
+basePackages="basesystem-minimal urpmi locales locales-en git-core abf htop"
+mirror="--mirrorlist http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/x86_64/"
+tarFile="./rootfs-${rosaVersion}_$(date +%Y-%M-%d).tar.xz"
 
 (
         urpmi.addmedia --distrib \
@@ -21,29 +22,17 @@ tarFile="./rootfs.tar.xz"
                 --root "$rootfsDir"
 )
 
-  cd "$rootfsDir"
+  pushd "$rootfsDir"
   
   # Clean 
-  #  locales
-	#rm -rf usr/{{lib,share}/locale,{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
-	#  docs
-	rm -rf usr/share/{man,doc,info,gnome/help}
-	#  cracklib
-	rm -rf usr/share/cracklib
-	#  i18n
-	rm -rf usr/share/i18n
 	#  urpmi cache
 	rm -rf var/cache/urpmi
 	mkdir -p --mode=0755 var/cache/urpmi
-	# rpm
-	rm var/lib/rpm/*db.*
-	#  sln
-	rm -rf sbin/sln
 	#  ldconfig
 	#rm -rf sbin/ldconfig
 	rm -rf etc/ld.so.cache var/cache/ldconfig
 	mkdir -p --mode=0755 var/cache/ldconfig
- cd ..
+ popd
 # Docker mounts tmpfs at /dev and procfs at /proc so we can remove them
 rm -rf "$rootfsDir/dev" "$rootfsDir/proc"
 mkdir -p "$rootfsDir/dev" "$rootfsDir/proc"
@@ -52,7 +41,9 @@ mkdir -p "$rootfsDir/dev" "$rootfsDir/proc"
 mkdir -p "$rootfsDir/etc"
 cat > "$rootfsDir/etc/resolv.conf" <<'EOF'
 nameserver 8.8.8.8
+nameserver 77.88.8.8
 nameserver 8.8.4.4
+nameserver 77.88.8.1
 EOF
     
 touch "$tarFile"
@@ -60,6 +51,7 @@ touch "$tarFile"
 (
         set -x
         tar --numeric-owner -caf "$tarFile" -C "$rootfsDir" --transform='s,^./,,' .
+        ln -s "./rootfs.tar.xz" "$tarFile"
 )
 
-#( set -x; rm -rf "$rootfsDir" )
+( set -x; rm -rf "$rootfsDir" )
