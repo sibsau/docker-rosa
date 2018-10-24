@@ -5,11 +5,12 @@
 # Based on mkimage-urpmi.sh (https://github.com/juanluisbaptiste/docker-brew-mageia)
 #
 
+arch="x86_64"
 rosaVersion="rosa2016.1"
 rootfsDir="./rootfsDir" 
 basePackages="basesystem-minimal urpmi locales locales-en git-core abf htop"
-mirror="--mirrorlist http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/x86_64/"
-tarFile="./rootfs-${rosaVersion}_$(date +%Y-%M-%d).tar.xz"
+mirror="--mirrorlist http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/"
+tarFile="./rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d).tar.xz"
 
 (
         urpmi.addmedia --distrib \
