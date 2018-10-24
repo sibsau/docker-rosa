@@ -10,8 +10,9 @@ arch="${arch:-x86_64}"
 rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
 outDir="${outDir:-"."}"
-# branding-configs-fresh has problems with dependencies
-basePackages="${basePackages:-basesystem-minimal urpmi locales locales-en git-core abf rpm-build htop xz iputils iproute2 nano squashfs-tools tar}"
+# branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
+basePackages="${basePackages:-basesystem-minimal bash urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
+chrootPackages="${chrootPackages:-branding-configs-fresh rpm-build}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
@@ -49,6 +50,9 @@ nameserver 77.88.8.8
 nameserver 8.8.4.4
 nameserver 77.88.8.1
 EOF
+
+# Those packages, installation of which fails when they are listed in $basePackages, are installed in chroot
+chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
 
 touch "$tarFile"
 
