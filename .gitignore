@@ -1,3 +1,5 @@
 *.tar.xz
+*.txz
+*.sqfs
 *.directory
 BUILD_*
