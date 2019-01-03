@@ -11,7 +11,7 @@ rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
 outDir="${outDir:-"."}"
 # branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
-basePackages="${basePackages:-basesystem-minimal bash urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar}"
+basePackages="${basePackages:-basesystem-minimal bash urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar timezone}"
 chrootPackages="${chrootPackages:-systemd branding-configs-fresh rpm-build}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
