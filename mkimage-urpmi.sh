@@ -53,6 +53,11 @@ chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
 # clean-up
 for i in dev sys proc; do rm -fr "${rootfsDir:?}/${i:?}/*"; done
 
+# disable pam_securetty to allow logging in as root via `systemd-nspawn -b`
+# https://bugzilla.rosalinux.ru/show_bug.cgi?id=9631
+# https://github.com/systemd/systemd/issues/852
+sed -e '/pam_securetty.so/d' -i "${rootfsDir}/etc/pam.d/login"
+
 touch "$tarFile"
 
 (
