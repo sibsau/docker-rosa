@@ -38,9 +38,6 @@ sqfsFile="${outDir}/${outName}.sqfs"
 	rm -rf etc/ld.so.cache var/cache/ldconfig
 	mkdir -p --mode=0755 var/cache/ldconfig
  popd
-# Docker mounts tmpfs at /dev and procfs at /proc so we can remove them
-rm -rf "$rootfsDir/dev" "$rootfsDir/proc"
-mkdir -p "$rootfsDir/dev" "$rootfsDir/proc"
 
 # make sure /etc/resolv.conf has something useful in it
 mkdir -p "$rootfsDir/etc"
@@ -53,6 +50,8 @@ EOF
 
 # Those packages, installation of which fails when they are listed in $basePackages, are installed in chroot
 chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
+# clean-up
+for i in dev sys proc; do rm -fr "${rootfsDir:?}/${i:?}/*"; done
 
 touch "$tarFile"
 
