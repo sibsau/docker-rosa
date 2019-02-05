@@ -5,6 +5,8 @@
 # Based on mkimage-urpmi.sh (https://github.com/juanluisbaptiste/docker-brew-mageia)
 #
 
+set -efu
+
 #TIME="${TIME:-5}"
 arch="${arch:-x86_64}"
 rosaVersion="${rosaVersion:-rosa2016.1}"
