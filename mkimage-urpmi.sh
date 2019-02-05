@@ -51,6 +51,8 @@ nameserver 77.88.8.1
 EOF
 
 # Those packages, installation of which fails when they are listed in $basePackages, are installed in chroot
+# Fix SSL in chroot (/dev/urandom is needed)
+mount --bind -v /dev "${rootfsDir}/dev"
 chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
 # clean-up
 for i in dev sys proc; do rm -fr "${rootfsDir:?}/${i:?}/*"; done
