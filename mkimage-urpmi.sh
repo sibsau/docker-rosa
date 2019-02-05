@@ -67,7 +67,7 @@ touch "$tarFile"
 (
         set -x
         tar --numeric-owner -cf - "$rootfsDir" --transform='s,^./,,' | xz --compress -9 --threads=0 - > "$tarFile"
-        ln -s "$tarFile" "./rootfs.tar.xz"
+        ln -s "$tarFile" "./rootfs.tar.xz" || :
         mksquashfs "$rootfsDir" "$sqfsFile" -comp xz
         
 )
