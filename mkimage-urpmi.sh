@@ -14,7 +14,7 @@ rootfsDir="${rootfsDir:-./BUILD_rootfs}"
 outDir="${outDir:-"."}"
 # branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
 basePackages="${basePackages:-basesystem-minimal bash urpmi}"
-chrootPackages="${chrootPackages:-systemd initscripts termcap locales locales-en git-core abf htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
+chrootPackages="${chrootPackages:-systemd initscripts termcap dhcp-client locales locales-en git-core abf htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
 mirror="${mirror:-http://mirror.yandex.ru/rosa/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%m-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
@@ -70,6 +70,11 @@ for i in dev sys proc; do
 	umount "${rootfsDir}/${i}" || :
 	rm -fr "${rootfsDir:?}/${i:?}/*"
 done
+
+# systemd-networkd makes basic network configuration automatically
+# After it, you can either make /etc/systemd/network/*.conf or
+# `systemctl enable dhclient@eth0`, where eth0 is your network interface from `ip a`
+chroot "$rootfsDir" /bin/sh -c "systemctl enable systemd-networkd"
 
 # disable pam_securetty to allow logging in as root via `systemd-nspawn -b`
 # https://bugzilla.rosalinux.ru/show_bug.cgi?id=9631
