@@ -13,8 +13,8 @@ rosaVersion="${rosaVersion:-rosa2016.1}"
 rootfsDir="${rootfsDir:-./BUILD_rootfs}" 
 outDir="${outDir:-"."}"
 # branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
-basePackages="${basePackages:-basesystem-minimal bash urpmi locales locales-en git-core abf htop xz iputils iproute2 nano squashfs-tools tar timezone passwd}"
-chrootPackages="${chrootPackages:-systemd branding-configs-fresh rpm-build}"
+basePackages="${basePackages:-basesystem-minimal bash urpmi}"
+chrootPackages="${chrootPackages:-systemd initscripts termcap locales locales-en git-core abf htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
 mirror="${mirror:-http://abf-downloads.rosalinux.ru/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%M-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
@@ -54,6 +54,17 @@ EOF
 # Fix SSL in chroot (/dev/urandom is needed)
 mount --bind -v /dev "${rootfsDir}/dev"
 chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
+
+# Try to configure root shell
+# package 'initscripts' contains important scripts from /etc/profile.d/
+# package 'termcap' containes /etc/termcap which allows the console to work properly
+chroot "$rootfsDir" /bin/sh -c "chsh --shell /bin/bash root"
+if [ ! -d "${rootfsDir}/root" ]; then mkdir -p "${rootfsDir}/root"; fi
+while read -r line
+do
+	cp -vp "${rootfsDir}/${line}" "${rootfsDir}/root/"
+done < <(chroot "$rootfsDir" /bin/sh -c 'rpm -ql bash | grep ^/etc/skel')
+
 # clean-up
 for i in dev sys proc; do
 	umount "${rootfsDir}/${i}" || :
@@ -74,5 +85,5 @@ touch "$tarFile"
         mksquashfs "$rootfsDir" "$sqfsFile" -comp xz
         
 )
-s
+
 ( set -x; rm -rf "$rootfsDir" )
