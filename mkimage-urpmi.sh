@@ -14,7 +14,7 @@ rootfsDir="${rootfsDir:-./BUILD_rootfs}"
 outDir="${outDir:-"."}"
 # branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
 basePackages="${basePackages:-basesystem-minimal bash urpmi}"
-chrootPackages="${chrootPackages:-systemd initscripts termcap dhcp-client locales locales-en git-core abf htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
+chrootPackages="${chrootPackages:-systemd initscripts termcap dhcp-client locales locales-en git-core htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
 mirror="${mirror:-http://mirror.yandex.ru/rosa/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%m-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
