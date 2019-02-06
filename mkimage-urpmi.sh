@@ -53,7 +53,7 @@ EOF
 # Those packages, installation of which fails when they are listed in $basePackages, are installed in chroot
 # Fix SSL in chroot (/dev/urandom is needed)
 mount --bind -v /dev "${rootfsDir}/dev"
-chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto"
+chroot "$rootfsDir" /bin/sh -c "urpmi ${chrootPackages} --auto --no-suggests"
 
 # Try to configure root shell
 # package 'initscripts' contains important scripts from /etc/profile.d/
