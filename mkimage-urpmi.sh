@@ -14,7 +14,7 @@ rootfsDir="${rootfsDir:-./BUILD_rootfs}"
 outDir="${outDir:-"."}"
 # branding-configs-fresh, rpm-build have problems with dependencies, so let's install them in chroot
 basePackages="${basePackages:-basesystem-minimal bash urpmi}"
-chrootPackages="${chrootPackages:-systemd initscripts termcap dhcp-client locales locales-en git-core htop iputils iproute2 nano squashfs-tools tar timezone passwd branding-configs-fresh rpm-build}"
+chrootPackages="${chrootPackages:-locales locales-en}"
 mirror="${mirror:-http://mirror.yandex.ru/rosa/${rosaVersion}/repository/${arch}/}"
 outName="${outName:-"rootfs-${rosaVersion}_${arch}_$(date +%Y-%m-%d)"}"
 tarFile="${outDir}/${outName}.tar.xz"
@@ -74,7 +74,7 @@ done
 # systemd-networkd makes basic network configuration automatically
 # After it, you can either make /etc/systemd/network/*.conf or
 # `systemctl enable dhclient@eth0`, where eth0 is your network interface from `ip a`
-chroot "$rootfsDir" /bin/sh -c "systemctl enable systemd-networkd"
+# chroot "$rootfsDir" /bin/sh -c "systemctl enable systemd-networkd"
 
 # disable pam_securetty to allow logging in as root via `systemd-nspawn -b`
 # https://bugzilla.rosalinux.ru/show_bug.cgi?id=9631
@@ -87,7 +87,7 @@ touch "$tarFile"
         set -x
         tar --numeric-owner -cf - "$rootfsDir" --transform='s,^./,,' | xz --compress -9 --threads=0 - > "$tarFile"
         ln -s "$tarFile" "./rootfs.tar.xz" || :
-        mksquashfs "$rootfsDir" "$sqfsFile" -comp xz
+        #mksquashfs "$rootfsDir" "$sqfsFile" -comp xz
         
 )
 
